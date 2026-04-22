@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hola Mundo — Práctica Final DevOps</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #f5f0e8;
+      --bg2: #ede8df;
+      --card: #ffffff;
+      --border: #d9d2c5;
+      --accent: #e85d26;
+      --accent2: #2563eb;
+      --text: #1a1612;
+      --muted: #8a7f72;
+      --green: #16a34a;
+      --tag-bg: #fef3ec;
+      --tag-border: #f5c4a8;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      top: 24px; left: 24px; right: 24px; bottom: 24px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .wrapper { position: relative; z-index: 1; width: min(680px, 92vw); }
+    .eyebrow {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.5s ease both;
+    }
+    .eyebrow-line { flex: 1; height: 1px; background: var(--border); }
+    .eyebrow-text { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .live-dot {
+      width: 7px; height: 7px; background: var(--green);
+      border-radius: 50%; box-shadow: 0 0 0 3px rgba(22,163,74,0.15);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 3px rgba(22,163,74,0.15);} 50%{box-shadow:0 0 0 6px rgba(22,163,74,0.05);} }
+    .hero { position: relative; margin-bottom: 32px; animation: fadeUp 0.5s 0.1s ease both; }
+    .hero-number {
+      position: absolute; top: -12px; right: 0;
+      font-size: 120px; font-family: 'Playfair Display', serif; font-weight: 900;
+      color: var(--border); line-height: 1; user-select: none; letter-spacing: -0.05em;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif; font-weight: 900;
+      font-size: clamp(3.5rem, 11vw, 6rem); line-height: 0.92;
+      letter-spacing: -0.02em; position: relative; z-index: 1;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+    .subtitle { margin-top: 14px; font-size: 12px; color: var(--muted); letter-spacing: 0.06em; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; animation: fadeUp 0.5s 0.2s ease both; }
+    .tag { background: var(--tag-bg); border: 1px solid var(--tag-border); border-radius: 4px; padding: 5px 12px; font-size: 11px; color: var(--accent); letter-spacing: 0.04em; }
+    .tag.blue { background: #eff6ff; border-color: #bfdbfe; color: var(--accent2); }
+    .tag.green { background: #f0fdf4; border-color: #bbf7d0; color: var(--green); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); animation: fadeUp 0.5s 0.3s ease both; }
+    .card-header {
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 10px 20px; font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card-header::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fc5f5f; box-shadow: 12px 0 0 #fdbc40, 24px 0 0 #33c748; }
+    .row { display: flex; justify-content: space-between; align-items: center; padding: 13px 20px; border-bottom: 1px solid #f0ece4; font-size: 12px; }
+    .row:last-child { border-bottom: none; }
+    .key { color: var(--muted); }
+    .val { color: var(--text); font-weight: 500; }
+    .val.orange { color: var(--accent); }
+    .val.blue   { color: var(--accent2); }
+    .val.green  { color: var(--green); }
+    .pipeline-title { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; animation: fadeUp 0.5s 0.4s ease both; }
+    .pipeline { display: flex; align-items: center; gap: 0; margin-bottom: 28px; overflow-x: auto; padding-bottom: 4px; animation: fadeUp 0.5s 0.4s ease both; }
+    .step { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 10px 16px; font-size: 11px; color: var(--text); white-space: nowrap; transition: background 0.2s; }
+    .step:hover { background: var(--tag-bg); }
+    .step .icon { margin-right: 6px; }
+    .step.done { border-color: #bbf7d0; background: #f0fdf4; color: var(--green); }
+    .arrow { color: var(--border); font-size: 16px; padding: 0 6px; flex-shrink: 0; }
+    .footer { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); animation: fadeUp 0.5s 0.5s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="eyebrow">
+      <span class="live-dot"></span>
+      <span class="eyebrow-text">Servidor activo en producción</span>
+      <div class="eyebrow-line"></div>
+    </div>
+    <div class="hero">
+      <div class="hero-number">01</div>
+      <h1>Hola<br><em>Mundo</em></h1>
+      <p class="subtitle">// Práctica Final DevOps · CI/CD completo</p>
+    </div>
+    <div class="tags">
+      <span class="tag">Node.js</span>
+      <span class="tag">Express</span>
+      <span class="tag blue">Docker</span>
+      <span class="tag blue">GitHub Actions</span>
+      <span class="tag green">Jest</span>
+      <span class="tag green">Render.com</span>
+    </div>
+    <div class="card">
+      <div class="card-header">info del contenedor</div>
+      <div class="card-body">
+        <div class="row"><span class="key">Autor</span>     <span class="val green">jeacarlos3015</span></div>
+        <div class="row"><span class="key">Versión</span>   <span class="val">1.0.0</span></div>
+        <div class="row"><span class="key">Entorno</span>   <span class="val orange">Production</span></div>
+        <div class="row"><span class="key">Uptime</span>    <span class="val blue" id="uptime">—</span></div>
+        <div class="row"><span class="key">Timestamp</span> <span class="val" id="timestamp">—</span></div>
+      </div>
+    </div>
+    <p class="pipeline-title">Pipeline CI/CD</p>
+    <div class="pipeline">
+      <div class="step done"><span class="icon"></span>Install</div><span class="arrow">→</span>
+      <div class="step done"><span class="icon"></span>Tests</div><span class="arrow">→</span>
+      <div class="step done"><span class="icon"></span>Docker Build</div><span class="arrow">→</span>
+      <div class="step done"><span class="icon"></span>Docker Hub</div><span class="arrow">→</span>
+      <div class="step done"><span class="icon"></span>Deploy</div>
+    </div>
+    <div class="footer">
+      <span>jeacarlos3015 · Práctica Final DevOps</span>
+      <span id="fecha">—</span>
+    </div>
+  </div>
+  <script>
+    fetch('/api/saludo').then(r=>r.json()).then(d=>{
+      document.getElementById('timestamp').textContent = new Date(d.timestamp).toLocaleString('es-DO');
+      document.getElementById('fecha').textContent = new Date(d.timestamp).toLocaleDateString('es-DO',{year:'numeric',month:'long',day:'numeric'});
+    }).catch(()=>{
+      const now = new Date();
+      document.getElementById('timestamp').textContent = now.toLocaleString('es-DO');
+      document.getElementById('fecha').textContent = now.toLocaleDateString('es-DO',{year:'numeric',month:'long',day:'numeric'});
+    });
+    fetch('/health').then(r=>r.json()).then(d=>{
+      document.getElementById('uptime').textContent = Math.floor(d.uptime)+'s';
+    }).catch(()=>{ document.getElementById('uptime').textContent='N/A'; });
+  </script>
+</body>
+</html>
